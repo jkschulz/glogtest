@@ -5,8 +5,10 @@ package main
  */
 import (
 	"fmt"
+  "flag"
+	"math/rand"
 	"os"
-	"flag"
+	"time"
 
 	"github.com/golang/glog"
 )
@@ -25,10 +27,18 @@ func init() {
 }
 
 func main() {
-	glog.Info("!an info message")
-	glog.Info("@#another info")
-	glog.Error("weewoo errah")
-	glog.V(2).Infoln("&this is a v2 info line ok")
-	glog.Warning("^WARN^")
-	glog.Flush()
+	rand.Seed(time.Now().UTC().UnixNano())
+	// Take the log interval and logging header from the environment
+	logInterval := convertToInt(os.Getenv("LOG_INTERVAL"), 2)
+	header := os.Getenv("HEADER")
+	whenToStart := rand.Intn(10)
+	time.Sleep(time.Duration(whenToStart) * time.Second)
+	for true {
+		time.Sleep(time.Duration(logInterval) * time.Second)
+		glog.Info("!an info message")
+		glog.Info("@#another info")
+		glog.Error("weewoo errah")
+		glog.V(2).Infoln("&this is a v2 info line ok")
+		glog.Warning("^WARN^")
+	}
 }
